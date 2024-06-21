@@ -401,6 +401,8 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 
 	float pi = float(M_PI);
 
+	Vector3 pointAB[kSubdivision] = {};
+	Vector3 pointAC[kSubdivision] = {};
 
 	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
 		float lat = -pi / 2.0f + kLatEvery * latIndex;//緯度 シ－タ
@@ -419,8 +421,13 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 			Vector3 cScreen = Transform(Transform(c, viewProjectionMatrix), viewportMatrix);
 
 
-			Novice::DrawLine((int)aScreen.x, (int)aScreen.y, (int)bScreen.x, (int)bScreen.y, color);
-			Novice::DrawLine((int)bScreen.x, (int)bScreen.y, (int)cScreen.x, (int)cScreen.y, color);
+			if (pointAB[latIndex].x != 0 && pointAB[lonIndex].x != 0) {
+				Novice::DrawLine((int)aScreen.x, (int)aScreen.y, (int)pointAB[latIndex].x, (int)pointAB[latIndex].y, color);
+				Novice::DrawLine((int)aScreen.x, (int)aScreen.y, (int)pointAC[lonIndex].x, (int)pointAC[lonIndex].y, color);
+			}
+
+			pointAB[latIndex] = aScreen;
+			pointAC[lonIndex] = aScreen;
 		}
 	}
 }
