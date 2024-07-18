@@ -432,14 +432,26 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 	}
 }
 
+Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
+	Vector3 result{};
+
+	result.x = v1.x - v2.x;
+	result.y = v1.y - v2.y;
+	result.z = v1.z - v2.z;
+
+	return result;
+}
+
+float Length(const Vector3& v) {
+	float result;
+	result = (float)sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+	return result;
+}
 
 bool IsCollision(const Sphere& s1, const Sphere& s2) {
-	float distanceX = (s2.center.x - s1.center.x) * (s2.center.x - s1.center.x);
-	float distanceY = (s2.center.y - s1.center.y) * (s2.center.y - s1.center.y);
-	float distanceZ = (s2.center.z - s1.center.z) * (s2.center.z - s1.center.z);
+	float distanceX = Length(Subtract(s1.center , s2.center));
 
-
-	if (distanceX + distanceY + distanceZ  <= s1.radius + s2.radius) {
+	if (distanceX <= s1.radius + s2.radius) {
 		return true;
 	}
 	return false;
